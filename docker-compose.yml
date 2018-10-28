@@ -1,0 +1,27 @@
+version: "3.5"
+services:
+  nginx: 
+    build:
+      context: ./ng/
+    image: nginx:latest
+    container_name: rev-proxy
+    volumes:
+      - ./ng/nginx.conf:/etc/nginx/nginx.conf
+      - ./ng/letsencrypt/:/etc/letsencrypt/
+    ports:
+      - 8000:80
+      - 4430:443
+    networks: 
+      - private-proxy
+  web:
+    build:
+      context: ./server/
+    container_name: webserver
+    networks: 
+      - private-proxy
+
+networks:
+  private-proxy: 
+
+
+
